@@ -1,27 +1,90 @@
 <div class="hero">
-  <h1>SHOW UP.<br>NEVER GIVE UP.</h1>
-  <p>Premium gym wear designed for the grind. By Nova Cruz.</p>
-  <a href="/products" class="btn">Shop the Collection</a>
+  <h1>Show Up.<br>Never Give Up.</h1>
+  <p>Premium gym wear designed for the grind. Every piece made to move.</p>
+  <div class="cta-group">
+    <a href="/products" class="btn btn-gold">Shop the Collection</a>
+    <a href="/about" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:#fff">Our Story</a>
+  </div>
 </div>
 
+<% if (collections && collections.length > 0) { %>
 <div class="container">
-  <h2 style="text-align:center;margin-bottom:30px">Featured</h2>
-  <% if (products && products.length > 0) { %>
+  <div class="section-header">
+    <h2>Collections</h2>
+    <p>Designed for the daily grind. Built to last.</p>
+  </div>
   <div class="grid">
-    <% products.forEach(p => { %>
-    <a href="/products/<%= p.id %>" style="text-decoration:none;color:inherit">
+    <% collections.forEach(c => { %>
+    <a href="/products?collection=<%= c.id %>" style="color:inherit;text-decoration:none">
       <div class="card">
-        <img src="<%= p.images[0] || 'https://placehold.co/400x400/1a3a2a/fff?text=Nova+Cruz' %>" alt="<%= p.title %>">
+        <img src="<%= c.image %>" alt="<%= c.name %>">
         <div class="card-body">
-          <h3><%= p.title %></h3>
-          <div class="price">$<%= p.variants[0]?.price || '29.99' %></div>
-          <div class="supplier"><%= p.supplier || 'printify' %></div>
+          <div class="collection-tag">Collection</div>
+          <h3><%= c.name %></h3>
+          <p style="font-size:13px;color:#888"><%= c.description %></p>
         </div>
       </div>
     </a>
     <% }) %>
   </div>
-  <% } else { %>
-  <p style="text-align:center;color:#999">Products syncing from Printify — check back soon.</p>
+</div>
+<% } %>
+
+<div class="container">
+  <div class="section-header">
+    <h2>Featured</h2>
+    <p>The pieces everyone's talking about.</p>
+  </div>
+
+  <% if (error) { %>
+  <div class="alert"><%= error %></div>
   <% } %>
+
+  <% if (products && products.length > 0) { %>
+  <div class="grid">
+    <% products.forEach(p => { %>
+    <a href="/products/<%= p.id %>" style="color:inherit;text-decoration:none">
+      <div class="card">
+        <img src="<%= p.image || p.images?.[0] || '' %>" alt="<%= p.title %>">
+        <div class="card-body">
+          <div class="collection-tag"><%= p.collection === 'nova-signature' ? 'Nova Signature' : 'The Basics' %></div>
+          <h3><%= p.title %></h3>
+          <div class="price">$<%= typeof p.price === 'number' ? p.price.toFixed(2) : parseFloat(p.variants?.[0]?.price || p.price).toFixed(2) %></div>
+        </div>
+      </div>
+    </a>
+    <% }) %>
+  </div>
+
+  <div class="text-center mt-40">
+    <a href="/products" class="btn">View All Products</a>
+  </div>
+  <% } else { %>
+  <p class="text-center" style="color:#888">Products syncing — check back soon.</p>
+  <% } %>
+</div>
+
+<div class="container" style="padding:80px 20px">
+  <div class="about-grid">
+    <img src="https://images.unsplash.com/photo-1549476464-373922117c43?w=600&q=80" alt="Nova Cruz gym wear">
+    <div class="about-content">
+      <h1>Built for the Grind</h1>
+      <p>Nova Cruz isn't just a brand — it's a mindset. Every piece is designed for the 6AM workouts, the late-night sessions, the days you show up at 60% and still give everything.</p>
+      <p>Premium materials. Clean designs. No distractions. Just gear that performs as hard as you do.</p>
+      <div class="stats">
+        <div class="stat">
+          <div class="num">55%</div>
+          <div class="label">Avg Margin</div>
+        </div>
+        <div class="stat">
+          <div class="num">8</div>
+          <div class="label">Products</div>
+        </div>
+        <div class="stat">
+          <div class="num">2</div>
+          <div class="label">Collections</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

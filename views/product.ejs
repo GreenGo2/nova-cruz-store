@@ -1,39 +1,103 @@
 <div class="container">
   <div class="product-detail">
-    <img src="<%= product.images[0] || 'https://placehold.co/600x600/1a3a2a/fff?text=Nova' %>" alt="<%= product.title %>">
-    <div>
+    <!-- Images -->
+    <div class="product-images">
+      <img class="main-image" id="mainImage"
+           src="<%= product.images?.[0] || product.image || '' %>"
+           alt="<%= product.title %>">
+      <% if (product.images && product.images.length > 1) { %>
+      <div class="thumb-strip">
+        <% product.images.forEach((img, i) => { %>
+        <img class="thumb <%= i === 0 ? 'active' : '' %>"
+             src="<%= img %>"
+             alt="<%= product.title %> view <%= i + 1 %>"
+             onclick="document.getElementById('mainImage').src=this.src;this.parentElement.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));this.classList.add('active')">
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Info -->
+    <div class="product-info">
+      <div class="collection-tag"><%= product.collection === 'nova-signature' ? 'Nova Signature' : 'The Basics' %></div>
       <h1><%= product.title %></h1>
-      <div class="price">$<%= product.variants[0]?.price || '29.99' %></div>
-      <p style="color:#666;margin-bottom:20px"><%= product.description || 'Premium gym wear by Nova Cruz. Moisture-wicking. 4-way stretch. Made for the grind.' %></p>
-      <form action="/cart/add" method="POST">
-        <input type="hidden" name="productId" value="<%= product.id %>">
-        <input type="hidden" name="title" value="<%= product.title %>">
-        <input type="hidden" name="image" value="<%= product.images[0] || '' %>">
-        <% if (product.variants.length > 1) { %>
-        <label style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#999">Size / Variant</label>
-        <select name="variantId">
-          <% product.variants.forEach(v => { %>
-          <option value="<%= v.id %>"><%= v.title %> — $<%= v.price %></option>
+      <div class="price">$<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></div>
+      <p class="description"><%= product.description %></p>
+
+      <% if (product.features && product.features.length > 0) { %>
+      <div class="features">
+        <h4>Details</h4>
+        <ul>
+          <% product.features.forEach(f => { %>
+          <li><%= f %></li>
           <% }) %>
-        </select>
-        <input type="hidden" name="price" value="<%= product.variants[0].price %>" id="variantPrice">
-        <script>
-          document.querySelector('select[name="variantId"]').addEventListener('change', function(){
-            var selected = this.options[this.selectedIndex].text;
-            var price = selected.split(' — $')[1];
-            document.getElementById('variantPrice').value = price;
-          });
-        </script>
-        <% } else { %>
-        <input type="hidden" name="variantId" value="<%= product.variants[0]?.id || 1 %>">
-        <input type="hidden" name="price" value="<%= product.variants[0]?.price || '29.99' %>">
+        </ul>
+      </div>
+      <% } %>
+
+      <!-- Add to Cart Form -->
+      <form method="POST" action="/cart/add">
+        <input type="hidden" name="productId" value="<%= product.id %>">
+        <input type="hidden" name="variantId" value="<%= product.variants?.[0]?.title || 'default' %>">
+        <input type="hidden" name="title" value="<%= product.title %>">
+        <input type="hidden" name="price" value="<%= typeof product.price === 'number' ? product.price : product.variants?.[0]?.price || product.price %>">
+        <input type="hidden" name="image" value="<%= product.image || product.images?.[0] || '' %>">
+
+        <% if (product.colors && product.colors.length > 0) { %>
+        <div class="option-group">
+          <label>Color</label>
+          <select name="color">
+            <% product.colors.forEach(c => { %>
+            <option value="<%= c %>"><%= c %></option>
+            <% }) %>
+          </select>
+        </div>
         <% } %>
-        <label style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#999;display:block;margin-top:16px">Quantity</label>
-        <select name="quantity" style="width:80px">
-          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
-        </select>
-        <button type="submit" class="btn" style="display:block;width:100%;margin-top:20px">Add to Cart</button>
+
+        <% if (product.sizes && product.sizes.length > 0) { %>
+        <div class="option-group">
+          <label>Size</label>
+          <select name="size">
+            <% product.sizes.forEach(s => { %>
+            <option value="<%= s %>"><%= s %></option>
+            <% }) %>
+          </select>
+        </div>
+        <% } %>
+
+        <div class="option-group">
+          <label>Quantity</label>
+          <select name="quantity">
+            <% for (let i = 1; i <= 5; i++) { %>
+            <option value="<%= i %>"><%= i %></option>
+            <% } %>
+          </select>
+        </div>
+
+        <button type="submit" class="btn add-to-cart">Add to Cart</button>
       </form>
+
+      <p class="free-shipping">Free shipping on orders over $75</p>
     </div>
   </div>
+
+  <!-- Related Products -->
+  <% if (related && related.length > 0) { %>
+  <div class="section-header">
+    <h2>You Might Also Like</h2>
+  </div>
+  <div class="grid mb-40">
+    <% related.forEach(p => { %>
+    <a href="/products/<%= p.id %>" style="color:inherit;text-decoration:none">
+      <div class="card">
+        <img src="<%= p.image || p.images?.[0] || '' %>" alt="<%= p.title %>">
+        <div class="card-body">
+          <h3><%= p.title %></h3>
+          <div class="price">$<%= typeof p.price === 'number' ? p.price.toFixed(2) : parseFloat(p.variants?.[0]?.price || p.price).toFixed(2) %></div>
+        </div>
+      </div>
+    </a>
+    <% }) %>
+  </div>
+  <% } %>
 </div>

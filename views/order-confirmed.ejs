@@ -1,7 +1,13 @@
-<div class="container" style="text-align:center;padding:80px 20px">
-  <h1 style="font-size:3rem;color:#1a3a2a">Order Confirmed!</h1>
-  <p style="font-size:1.2rem;margin:16px 0">Thank you for your order. Nova's team is on it.</p>
-  <p style="color:#999">Order #<%= orderId %></p>
-  <p style="color:#666;margin-top:20px">You'll receive a confirmation email shortly.<br>Shipping typically takes 5-7 business days.</p>
-  <a href="/" class="btn" style="margin-top:30px">Back to Store</a>
+<div class="container confirmed">
+  <div class="confirmed-card">
+    <div class="check-icon">✓</div>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for your order. We'll send you a confirmation email shortly.</p>
+    <div class="order-id"><%= orderId %></div>
+    <p style="font-size:13px;color:#888">Save this order ID for reference.</p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+      <a href="/products" class="btn">Continue Shopping</a>
+      <a href="/" class="btn btn-outline">Back to Home</a>
+    </div>
+  </div>
 </div>

@@ -3,65 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%= storeName %> — Premium Gym Wear</title>
-<style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#faf8f5;color:#1a1a1a;line-height:1.6}
-  nav{background:#fff;border-bottom:1px solid #e8e4df;padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
-  nav a{text-decoration:none;color:#1a1a1a;font-weight:600;margin:0 16px;font-size:14px;text-transform:uppercase;letter-spacing:1px}
-  nav .logo{font-size:20px;letter-spacing:3px;color:#1a3a2a}
-  nav .cart-badge{background:#1a3a2a;color:#fff;border-radius:50%;padding:2px 8px;font-size:12px;margin-left:4px}
-  .hero{text-align:center;padding:80px 20px;background:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),url('https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=1200') center/cover;color:#fff}
-  .hero h1{font-size:3rem;margin-bottom:12px;letter-spacing:2px}
-  .hero p{font-size:1.2rem;opacity:.9;max-width:500px;margin:0 auto 24px}
-  .btn{display:inline-block;padding:14px 32px;background:#1a3a2a;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:14px;border:none;cursor:pointer}
-  .btn-light{background:#fff;color:#1a3a2a}
-  .container{max-width:1200px;margin:0 auto;padding:40px 20px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-top:20px}
-  .card{background:#fff;border-radius:8px;overflow:hidden;transition:transform .2s}
-  .card:hover{transform:translateY(-4px)}
-  .card img{width:100%;height:300px;object-fit:cover}
-  .card-body{padding:16px}
-  .card h3{font-size:16px;margin-bottom:4px}
-  .card .price{font-size:18px;font-weight:700;color:#1a3a2a}
-  .card .supplier{font-size:11px;color:#999;text-transform:uppercase}
-  .product-detail{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-  .product-detail img{width:100%;border-radius:8px;max-height:500px;object-fit:cover}
-  .product-detail h1{font-size:2rem;margin-bottom:8px}
-  .product-detail .price{font-size:1.5rem;font-weight:700;color:#1a3a2a;margin-bottom:16px}
-  .product-detail select{padding:10px;border:1px solid #ddd;border-radius:6px;width:100%;margin-bottom:16px;font-size:14px}
-  .cart-table{width:100%;border-collapse:collapse;margin:20px 0}
-  .cart-table th,.cart-table td{padding:12px;text-align:left;border-bottom:1px solid #e8e4df}
-  .cart-table th{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#999}
-  .total{text-align:right;font-size:1.5rem;font-weight:700;margin:20px 0}
-  .checkout-form{max-width:500px;margin:0 auto}
-  .checkout-form input,.checkout-form select{width:100%;padding:12px;margin-bottom:12px;border:1px solid #ddd;border-radius:6px;font-size:14px}
-  .checkout-form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .admin-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:14px}
-  .admin-table th,.admin-table td{padding:10px;text-align:left;border-bottom:1px solid #e8e4df}
-  .admin-table th{background:#f5f3ef;text-transform:uppercase;letter-spacing:1px;font-size:11px}
-  .status{display:inline-block;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600}
-  .status.published{background:#dcfce7;color:#166534}
-  .status.draft{background:#fef3c7;color:#92400e}
-  .alert{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:16px;border-radius:8px;margin:20px 0}
-  footer{text-align:center;padding:40px;color:#999;font-size:13px;border-top:1px solid #e8e4df;margin-top:60px}
-</style>
+<title><%= BRAND.name %> — Premium Gym Wear</title>
+<meta name="description" content="<%= BRAND.tagline %> Premium gym wear designed for the grind. By Nova Cruz.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>">
+<link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
+
 <nav>
-  <a href="/" class="logo"><%= storeName.toUpperCase() %></a>
-  <div>
-    <a href="/">Home</a>
-    <a href="/products">Shop</a>
-    <a href="/cart">Cart<% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %></a>
+  <a href="/" class="logo"><%= BRAND.name %></a>
+  <div class="nav-links">
+    <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a>
+    <a href="/products" class="<%= currentPath.startsWith('/products') ? 'active' : '' %>">Shop</a>
+    <a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">About</a>
+    <a href="/cart" class="cart-link <%= currentPath === '/cart' ? 'active' : '' %>">
+      Cart
+      <% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %>
+    </a>
   </div>
 </nav>
 
+<main>
 <%- body %>
+</main>
 
 <footer>
-  <%= storeName %> — Premium gym wear. Made for athletes.<br>
-  <a href="/">Home</a> · <a href="/products">Shop</a> · <a href="/admin">Admin</a>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4><%= BRAND.name %></h4>
+      <p>Premium gym wear designed for the grind. Built by athletes, for athletes. Every piece designed to move with you.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="/products">All Products</a>
+      <a href="/products?collection=the-basics">The Basics</a>
+      <a href="/products?collection=nova-signature">Nova Signature</a>
+      <a href="/cart">Your Cart</a>
+    </div>
+    <div class="footer-col">
+      <h4>Brand</h4>
+      <a href="/about">Our Story</a>
+      <a href="https://instagram.com/nova.cruz.fit" target="_blank"><%= BRAND.instagram %></a>
+      <a href="/admin">Admin</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="mailto:info@luxuryapartmentnyc.com">Contact</a>
+      <a href="#">Shipping & Returns</a>
+      <a href="#">Size Guide</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 <%= BRAND.name %>. All rights reserved. Free shipping on orders over $75.
+  </div>
 </footer>
+
 </body>
 </html>
