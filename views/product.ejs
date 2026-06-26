@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="product-detail">
+    <img src="<%= product.images[0] || 'https://placehold.co/600x600/1a3a2a/fff?text=Nova' %>" alt="<%= product.title %>">
+    <div>
+      <h1><%= product.title %></h1>
+      <div class="price">$<%= product.variants[0]?.price || '29.99' %></div>
+      <p style="color:#666;margin-bottom:20px"><%= product.description || 'Premium gym wear by Nova Cruz. Moisture-wicking. 4-way stretch. Made for the grind.' %></p>
+      <form action="/cart/add" method="POST">
+        <input type="hidden" name="productId" value="<%= product.id %>">
+        <input type="hidden" name="title" value="<%= product.title %>">
+        <input type="hidden" name="image" value="<%= product.images[0] || '' %>">
+        <% if (product.variants.length > 1) { %>
+        <label style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#999">Size / Variant</label>
+        <select name="variantId">
+          <% product.variants.forEach(v => { %>
+          <option value="<%= v.id %>"><%= v.title %> — $<%= v.price %></option>
+          <% }) %>
+        </select>
+        <input type="hidden" name="price" value="<%= product.variants[0].price %>" id="variantPrice">
+        <script>
+          document.querySelector('select[name="variantId"]').addEventListener('change', function(){
+            var selected = this.options[this.selectedIndex].text;
+            var price = selected.split(' — $')[1];
+            document.getElementById('variantPrice').value = price;
+          });
+        </script>
+        <% } else { %>
+        <input type="hidden" name="variantId" value="<%= product.variants[0]?.id || 1 %>">
+        <input type="hidden" name="price" value="<%= product.variants[0]?.price || '29.99' %>">
+        <% } %>
+        <label style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#999;display:block;margin-top:16px">Quantity</label>
+        <select name="quantity" style="width:80px">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+        </select>
+        <button type="submit" class="btn" style="display:block;width:100%;margin-top:20px">Add to Cart</button>
+      </form>
+    </div>
+  </div>
+</div>

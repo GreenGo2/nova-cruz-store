@@ -1,0 +1,59 @@
+<div class="container">
+  <h1>Admin Dashboard</h1>
+  <% if (error) { %><div class="alert"><%= error %></div><% } %>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:20px 0">
+    <div style="background:#fff;padding:20px;border-radius:8px">
+      <div style="font-size:2rem;font-weight:800;color:#1a3a2a"><%= products.length %></div>
+      <div style="color:#999;font-size:13px">Products</div>
+    </div>
+    <div style="background:#fff;padding:20px;border-radius:8px">
+      <div style="font-size:2rem;font-weight:800;color:#1a3a2a"><%= orders.length %></div>
+      <div style="color:#999;font-size:13px">Orders</div>
+    </div>
+    <div style="background:#fff;padding:20px;border-radius:8px">
+      <button onclick="syncProducts()" class="btn" style="font-size:12px">Sync Products Now</button>
+      <div id="syncResult" style="margin-top:8px;font-size:12px"></div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:30px">Products</h2>
+  <table class="admin-table">
+    <tr><th>ID</th><th>Title</th><th>Price</th><th>Status</th><th>Supplier</th></tr>
+    <% products.forEach(p => { %>
+    <tr>
+      <td style="font-size:11px;color:#999"><%= p.id.substring(0,8) %>...</td>
+      <td><a href="/products/<%= p.id %>"><%= p.title %></a></td>
+      <td>$<%= p.variants[0]?.price || '-' %></td>
+      <td><span class="status <%= p.published ? 'published' : 'draft' %>"><%= p.published ? 'Published' : 'Draft' %></span></td>
+      <td><%= p.supplier || 'printify' %></td>
+    </tr>
+    <% }) %>
+  </table>
+
+  <h2 style="margin-top:30px">Recent Orders</h2>
+  <table class="admin-table">
+    <tr><th>Order ID</th><th>Status</th><th>Total</th><th>Items</th><th>Date</th></tr>
+    <% orders.slice(0,20).forEach(o => { %>
+    <tr>
+      <td style="font-size:11px"><%= (o.id || '').substring(0,10) %>...</td>
+      <td><span class="status published"><%= o.status %></span></td>
+      <td>$<%= o.total %></td>
+      <td><%= o.items %></td>
+      <td style="font-size:12px;color:#999"><%= new Date(o.created).toLocaleDateString() %></td>
+    </tr>
+    <% }) %>
+    <% if (orders.length === 0) { %><tr><td colspan="5" style="color:#999;text-align:center">No orders yet</td></tr><% } %>
+  </table>
+</div>
+
+<script>
+async function syncProducts() {
+  document.getElementById('syncResult').textContent = 'Syncing...';
+  const res = await fetch('/admin/sync', {method:'POST'});
+  const data = await res.json();
+  document.getElementById('syncResult').textContent = data.success
+    ? 'Synced ' + data.count + ' products. Refresh page.'
+    : 'Error: ' + data.error;
+}
+</script>

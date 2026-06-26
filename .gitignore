@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+
+# Environment (block .env but allow templates)
+.env
+.env.local
+!.env.template
+!.env.railway
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output
+output/content/
+
+# IDE
+.vscode/
+.idea/

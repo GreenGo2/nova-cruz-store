@@ -1,0 +1,27 @@
+<div class="hero">
+  <h1>SHOW UP.<br>NEVER GIVE UP.</h1>
+  <p>Premium gym wear designed for the grind. By Nova Cruz.</p>
+  <a href="/products" class="btn">Shop the Collection</a>
+</div>
+
+<div class="container">
+  <h2 style="text-align:center;margin-bottom:30px">Featured</h2>
+  <% if (products && products.length > 0) { %>
+  <div class="grid">
+    <% products.forEach(p => { %>
+    <a href="/products/<%= p.id %>" style="text-decoration:none;color:inherit">
+      <div class="card">
+        <img src="<%= p.images[0] || 'https://placehold.co/400x400/1a3a2a/fff?text=Nova+Cruz' %>" alt="<%= p.title %>">
+        <div class="card-body">
+          <h3><%= p.title %></h3>
+          <div class="price">$<%= p.variants[0]?.price || '29.99' %></div>
+          <div class="supplier"><%= p.supplier || 'printify' %></div>
+        </div>
+      </div>
+    </a>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <p style="text-align:center;color:#999">Products syncing from Printify — check back soon.</p>
+  <% } %>
+</div>

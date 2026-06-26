@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>Shopping Cart</h1>
+  <% if (cart.length > 0) { %>
+  <table class="cart-table">
+    <tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+    <% cart.forEach((item, i) => { %>
+    <tr>
+      <td><%= item.title %></td>
+      <td>$<%= item.price %></td>
+      <td><%= item.quantity %></td>
+      <td>$<%= (parseFloat(item.price) * item.quantity).toFixed(2) %></td>
+      <td>
+        <form action="/cart/remove/<%= i %>" method="POST" style="display:inline">
+          <button style="background:none;border:none;color:#991b1b;cursor:pointer">Remove</button>
+        </form>
+      </td>
+    </tr>
+    <% }) %>
+  </table>
+  <div class="total">Total: $<%= total %></div>
+  <div style="text-align:right">
+    <a href="/products" class="btn btn-light">Continue Shopping</a>
+    <a href="/checkout" class="btn">Checkout</a>
+  </div>
+  <% } else { %>
+  <p style="text-align:center;color:#999;padding:60px 0">Your cart is empty. <a href="/products">Browse products →</a></p>
+  <% } %>
+</div>
