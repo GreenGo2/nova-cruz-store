@@ -14,7 +14,7 @@ const path = require("path");
 const { initSuppliers } = require("./lib/suppliers");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || process.env.RAILWAY_PORT || 3000;
 
 // ── Config ─────────────────────────────────────────────────────
 const config = {
